@@ -1,0 +1,8 @@
+!pip install ultralytics roboflow
+from roboflow import Roboflow
+rf = Roboflow(api_key="YOUR_KEY")   # keep this private
+ds = rf.workspace("YOUR_WS").project("YOUR_PROJECT").version(1).download("yolov8")
+
+from ultralytics import YOLO
+model = YOLO("yolov8n.pt")          # nano = fastest on the Pi
+model.train(data=f"{ds.location}/data.yaml", imgsz=416, epochs=50,batch=16, patience=25)
